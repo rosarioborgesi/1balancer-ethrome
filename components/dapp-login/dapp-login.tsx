@@ -1,4 +1,4 @@
-import { UserButton } from "@civic/auth/react";
+import { UserButton } from "@civic/auth-web3/react";
 import { SignInButton } from "@farcaster/auth-kit";
 import "@farcaster/auth-kit/styles.css";
 

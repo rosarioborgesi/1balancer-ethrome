@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { base } from "wagmi/chains";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import "@coinbase/onchainkit/styles.css";
-import { CivicAuthProvider } from "@civic/auth/nextjs";
+import { CivicAuthProvider } from "@civic/auth-web3/nextjs";
 import { AuthKitProvider } from "@farcaster/auth-kit";
 
 export function RootProvider({ children }: { children: ReactNode }) {
