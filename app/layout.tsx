@@ -43,7 +43,10 @@ export default function RootLayout({
   return (
     <Providers>
       <html lang="en">
-        <body className={`${inter.variable} ${sourceCodePro.variable}`}>
+        <body
+          className={`${inter.variable} ${sourceCodePro.variable}`}
+          cz-shortcut-listen="true"
+        >
           <SafeArea>{children}</SafeArea>
         </body>
       </html>
