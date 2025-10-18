@@ -59,8 +59,18 @@ export function UserProfileSection() {
       loadUserPortfolios();
     };
 
+    const handlePortfolioCreated = () => {
+      console.log("🎉 New portfolio created in UserProfileSection");
+      loadUserPortfolios();
+      loadUserProfile(); // Refresh stats
+    };
+
     window.addEventListener("portfolios-updated", handlePortfoliosUpdated);
-    return () => window.removeEventListener("portfolios-updated", handlePortfoliosUpdated);
+    window.addEventListener("portfolio-created", handlePortfolioCreated);
+    return () => {
+      window.removeEventListener("portfolios-updated", handlePortfoliosUpdated);
+      window.removeEventListener("portfolio-created", handlePortfolioCreated);
+    };
   }, []);
 
   // Refresh portfolios stats when component mounts
@@ -509,22 +519,28 @@ export function UserProfileSection() {
                             </Badge>
                           </div>
                           <div className="flex flex-wrap gap-2 mb-2">
-                            {portfolio.tokens.slice(0, 3).map(token => (
-                              <span key={token.symbol} className="text-xs bg-accent px-2 py-1 rounded">
-                                {token.symbol} {token.percentage}%
-                              </span>
-                            ))}
-                            {portfolio.tokens.length > 3 && (
-                              <span className="text-xs text-muted-foreground">+{portfolio.tokens.length - 3} more</span>
+                            {portfolio.tokens && portfolio.tokens.length > 0 ? (
+                              <>
+                                {portfolio.tokens.slice(0, 3).map(token => (
+                                  <span key={token.symbol} className="text-xs bg-accent px-2 py-1 rounded">
+                                    {token.symbol} {token.percentage}%
+                                  </span>
+                                ))}
+                                {portfolio.tokens.length > 3 && (
+                                  <span className="text-xs text-muted-foreground">+{portfolio.tokens.length - 3} more</span>
+                                )}
+                              </>
+                            ) : (
+                              <span className="text-xs text-muted-foreground">No tokens</span>
                             )}
                           </div>
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <span>${portfolio.totalValue.toLocaleString()}</span>
-                            <span className={portfolio.performance >= 0 ? "text-green-500" : "text-red-500"}>
-                              {portfolio.performance >= 0 ? "+" : ""}
-                              {portfolio.performance.toFixed(2)}%
+                            <span>${(Number(portfolio.totalValue) || 0).toLocaleString()}</span>
+                            <span className={(Number(portfolio.performance) || 0) >= 0 ? "text-green-500" : "text-red-500"}>
+                              {(Number(portfolio.performance) || 0) >= 0 ? "+" : ""}
+                              {(Number(portfolio.performance) || 0).toFixed(2)}%
                             </span>
-                            <span>{new Date(portfolio.createdAt).toLocaleDateString()}</span>
+                            <span>{portfolio.createdAt ? new Date(portfolio.createdAt).toLocaleDateString() : 'N/A'}</span>
                           </div>
                         </div>
 

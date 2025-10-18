@@ -219,12 +219,19 @@ export function PortfolioSection() {
       loadPortfolios();
     };
 
+    const handlePortfolioCreated = () => {
+      console.log("🎉 New portfolio created, reloading...");
+      loadPortfolios();
+    };
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("portfolios-updated", handlePortfolioUpdate);
+    window.addEventListener("portfolio-created", handlePortfolioCreated);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("portfolios-updated", handlePortfolioUpdate);
+      window.removeEventListener("portfolio-created", handlePortfolioCreated);
     };
   }, [loadPortfolios]);
 
@@ -367,7 +374,7 @@ export function PortfolioSection() {
     }
   };
 
-  const totalPortfolioValue = savedWallets.reduce((sum, wallet) => sum + wallet.totalInvestment, 0);
+  const totalPortfolioValue = savedWallets.reduce((sum, wallet) => sum + (wallet.totalInvestment || 0), 0);
   const avgPerformance =
     savedWallets.length > 0
       ? savedWallets.reduce((sum, wallet) => sum + (wallet.performance?.returnPercentage || 0), 0) / savedWallets.length
@@ -635,7 +642,7 @@ export function PortfolioSection() {
                           <div className="flex justify-between items-center">
                             <span className="text-sm text-muted-foreground">Total Investment</span>
                             <span className="font-semibold text-foreground">
-                              ${wallet.totalInvestment.toLocaleString()}
+                              ${(wallet.totalInvestment || 0).toLocaleString()}
                             </span>
                           </div>
 

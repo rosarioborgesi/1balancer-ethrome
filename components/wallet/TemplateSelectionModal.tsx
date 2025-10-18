@@ -148,11 +148,11 @@ export function TemplateSelectionModal({ isOpen, onClose, templates, onSelect }:
                       <div className="flex items-center gap-1">
                         <TrendingUp className="w-3 h-3 text-green-500" />
                         <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                          +{(template.performance || Math.random() * 30 + 5).toFixed(1)}%
+                          +{(Number(template.performance) || (Math.random() * 30 + 5)).toFixed(1)}%
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        ${(template.totalValue || 10000).toLocaleString()}
+                        ${(Number(template.totalValue) || 10000).toLocaleString()}
                       </span>
                     </div>
                   </CardContent>

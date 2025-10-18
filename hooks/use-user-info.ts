@@ -6,12 +6,15 @@ export const useUserInfo = () => {
   const { user: userCivic } = useUser();
   const { isAuthenticated: isAuthenticatedWithFarcaster, profile } =
     useProfile();
-  console.log("=====", userCivic);
+  // console.log("===== userCivic:", userCivic);
+  // console.log("===== profile:", profile);
+
   const isUserAuthenticated = !!userCivic || isAuthenticatedWithFarcaster;
 
   const user = {
     userName: userCivic?.name ?? profile.username,
     userImg: userCivic?.picture ?? profile.pfpUrl,
+    address: (userCivic as any)?.address ?? (userCivic as any)?.wallet?.address ?? profile.custody,
   };
 
   return { isUserAuthenticated, user };

@@ -23,31 +23,32 @@ export default function Home() {
       sdk.isInMiniApp().then((res) => setIsInMiniApp(res));
     }
   }, [setMiniAppReady, isMiniAppReady]);
-  if (isInMiniApp === undefined) return null;
 
-  const fetchData = async () => {
-    const data = await getHomeData();
-    setHomeData(data);
-    setLoading(false);
-  };
-  fetchData();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getHomeData();
+        setHomeData(data);
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleGetStarted = () => {
-    if (user && isUserAuthenticated) {
-      router.push("/wallet");
-    } else {
-      // If not authenticated, the HomePage component will handle wallet connection
-      // and then we can redirect after successful connection
-    }
+    console.log("handleGetStarted called", { user, isUserAuthenticated });
+    router.push("/wallet");
   };
 
   const handleStartRebalancing = () => {
-    if (user && isUserAuthenticated) {
-      router.push("/wallet");
-    } else {
-      // If not authenticated, the HomePage component will handle wallet connection
-    }
+    console.log("handleStartRebalancing called", { user, isUserAuthenticated });
+    router.push("/rebalance");
   };
+
+  if (isInMiniApp === undefined) return null;
 
   if (loading) {
     return <div className="min-h-screen bg-background animate-pulse" />;

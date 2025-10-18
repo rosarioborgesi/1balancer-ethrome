@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { PortfolioSection } from "../portfolio/PortfolioSection";
 import { UserProfileSection } from "../profile/UserProfileSection";
-import { PieChartCreator } from "../shared/ui/PieChartCreator";
 import { TradeSection } from "../trade/TradeSection";
 import { TemplateSelectionModal } from "../wallet/TemplateSelectionModal";
 import {
@@ -28,8 +28,8 @@ interface WalletHomeSectionProps {
 }
 
 export function WalletHomeSectionSimplified({ activeWalletTab }: WalletHomeSectionProps) {
+  const router = useRouter();
   const [defaultPortfolios, setDefaultPortfolios] = useState<any[]>([]);
-  const [showPieChartCreator, setShowPieChartCreator] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
 
   // Load default portfolios on component mount
@@ -95,9 +95,10 @@ export function WalletHomeSectionSimplified({ activeWalletTab }: WalletHomeSecti
   };
 
   // Listen for navigation events from other components
+  // Event listener for navigating to create portfolio page (from external triggers)
   useEffect(() => {
     const handleNavigateToPieChart = () => {
-      setShowPieChartCreator(true);
+      router.push("/wallet/create-portfolio");
     };
 
     window.addEventListener("navigate-to-pie-chart", handleNavigateToPieChart);
@@ -105,7 +106,7 @@ export function WalletHomeSectionSimplified({ activeWalletTab }: WalletHomeSecti
     return () => {
       window.removeEventListener("navigate-to-pie-chart", handleNavigateToPieChart);
     };
-  }, []);
+  }, [router]);
 
   // Handle template selection from template modal
   const handleTemplateSelection = useCallback(() => {
@@ -125,10 +126,10 @@ export function WalletHomeSectionSimplified({ activeWalletTab }: WalletHomeSecti
     return <UserProfileSection />;
   }
 
-  // Show PieChartCreator if active
-  if (showPieChartCreator) {
-    return <PieChartCreator onBack={() => setShowPieChartCreator(false)} />;
-  }
+  // PieChartCreator is now accessible at /wallet/create-portfolio page
+  // if (showPieChartCreator) {
+  //   return <PieChartCreator onBack={() => setShowPieChartCreator(false)} />;
+  // }
 
   // Home tab content
   return (
@@ -244,7 +245,7 @@ export function WalletHomeSectionSimplified({ activeWalletTab }: WalletHomeSecti
               <Card
                 className="relative overflow-hidden border border-border/30 bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-sm hover:from-card/90 hover:to-card/70 transition-all duration-300 group cursor-pointer h-full"
                 onClick={() => {
-                  setShowPieChartCreator(true);
+                  router.push("/wallet/create-portfolio");
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -275,56 +276,7 @@ export function WalletHomeSectionSimplified({ activeWalletTab }: WalletHomeSecti
               </Card>
             </motion.div>
 
-            {/* Portfolio Templates */}
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Card
-                className="relative overflow-hidden border border-border/30 bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-sm hover:from-card/90 hover:to-card/70 transition-all duration-300 group cursor-pointer h-full"
-                onClick={() => {
-                  setShowTemplateModal(true);
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <CardHeader className="relative z-10 pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
-                      Professional Templates
-                    </CardTitle>
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center">
-                      <Crown className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                  <CardDescription className="text-muted-foreground">
-                    Choose from expertly crafted portfolio strategies
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="relative z-10 pt-4 space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    Access {defaultPortfolios.length} professional portfolios including 1Balancer EndGame, DeFi
-                    strategies, Real Yield RWA, and specialized sector focuses.
-                  </p>
-
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Rocket className="w-3 h-3" />
-                      <span>High Performance</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Shield className="w-3 h-3" />
-                      <span>Risk Managed</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users className="w-3 h-3" />
-                      <span>Community Tested</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-purple-500 group-hover:text-purple-400 transition-colors">
-                    <span className="text-sm font-medium">Explore Templates</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+          
           </div>
         </motion.div>
       </div>

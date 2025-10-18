@@ -28,6 +28,9 @@ import { toast } from "sonner";
 import { SwitchTheme } from "@/components/shared/ui/SwitchTheme";
 import { Button } from "@/components/shared/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { UserButton } from "@civic/auth-web3/react";
+import { SignInButton } from "@farcaster/auth-kit";
+import "@farcaster/auth-kit/styles.css";
 
 export function HeaderSimplified() {
   const { isUserAuthenticated, user } = useUserInfo();
@@ -62,7 +65,7 @@ export function HeaderSimplified() {
   const activeWalletTab = getActiveWalletTab();
 
   const isWalletConnected = isUserAuthenticated;
-  const walletAddress = user?.wallet?.address || "";
+  const walletAddress = user?.address || "";
 
   // Emit wallet connection event
   const emitWalletConnectionEvent = (connected: boolean) => {
@@ -86,6 +89,7 @@ export function HeaderSimplified() {
 
   // Function to connect wallet - now handled by Civic/Farcaster
   const connectWallet = async () => {
+    console.log("🔌 Connect wallet clicked!");
     toast.info("Please connect your wallet", {
       description: "Use Civic or Farcaster to authenticate",
       duration: 3000,
@@ -136,13 +140,16 @@ export function HeaderSimplified() {
   // Handle navigation clicks using Next.js router
   const handleNavClick = useCallback(
     (tab: "home" | "about" | "rebalance" | "top-performers") => {
+      console.log("🔍 handleNavClick called with tab:", tab);
       const routes = {
         home: "/",
         about: "/about",
         rebalance: "/rebalance",
         "top-performers": "/top-performers",
       };
-      router.push(routes[tab]);
+      const targetRoute = routes[tab];
+      console.log("🚀 Navigating to:", targetRoute);
+      router.push(targetRoute);
       setShowMobileMenu(false);
     },
     [router],
@@ -290,7 +297,7 @@ export function HeaderSimplified() {
                     {/* Active gradient background */}
                     {activeWalletTab === item.id && (
                       <motion.div
-                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90`}
+                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90 pointer-events-none`}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.9 }}
                         transition={{ duration: 0.3 }}
@@ -299,14 +306,14 @@ export function HeaderSimplified() {
 
                     {/* Hover gradient background with glow */}
                     <motion.div
-                      className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20`}
+                      className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 pointer-events-none`}
                       transition={{ duration: 0.3 }}
                     />
 
                     {/* Subtle glow effect for non-active tabs */}
                     {activeWalletTab !== item.id && (
                       <motion.div
-                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-5 blur-xl`}
+                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-5 blur-xl pointer-events-none`}
                         transition={{ duration: 0.3 }}
                       />
                     )}
@@ -348,7 +355,7 @@ export function HeaderSimplified() {
                     {/* Active gradient background */}
                     {activeTab === item.id && (
                       <motion.div
-                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90`}
+                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90 pointer-events-none`}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.9 }}
                         transition={{ duration: 0.3 }}
@@ -357,14 +364,14 @@ export function HeaderSimplified() {
 
                     {/* Hover gradient background with glow */}
                     <motion.div
-                      className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20`}
+                      className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 pointer-events-none`}
                       transition={{ duration: 0.3 }}
                     />
 
                     {/* Subtle glow effect for non-active tabs */}
                     {activeTab !== item.id && (
                       <motion.div
-                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-5 blur-xl`}
+                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-5 blur-xl pointer-events-none`}
                         transition={{ duration: 0.3 }}
                       />
                     )}
@@ -390,35 +397,12 @@ export function HeaderSimplified() {
             {/* Theme Toggle - Only show when not in wallet section */}
             {!shouldShowWalletNavigation && <SwitchTheme />}
 
-            {/* Wallet Button */}
+            {/* Wallet Button / Auth Buttons */}
             {!isWalletConnected ? (
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button
-                  onClick={connectWallet}
-                  disabled={!ready}
-                  className="relative overflow-hidden px-4 lg:px-6 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-sm lg:text-base text-white border-none"
-                  style={{
-                    background: "var(--gradient-primary)",
-                    boxShadow: "0 4px 20px rgba(20, 184, 166, 0.3)",
-                  }}
-                >
-                  {/* Gradient background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-500 opacity-90" />
-
-                  {/* Hover effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-teal-500 via-cyan-500 to-indigo-600 opacity-0"
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-
-                  {/* Content */}
-                  <div className="relative z-10 flex items-center gap-2">
-                    <Wallet className="w-4 h-4" />
-                    Connect Wallet
-                  </div>
-                </Button>
-              </motion.div>
+              <div className="flex items-center gap-2">
+                <UserButton />
+                <SignInButton />
+              </div>
             ) : (
               <div className="relative z-[9999]" ref={!isMobile ? buttonContainerRef : undefined}>
                 <motion.div ref={buttonWrapperRef} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -515,7 +499,7 @@ export function HeaderSimplified() {
                       {/* Active gradient background */}
                       {activeWalletTab === item.id && (
                         <motion.div
-                          className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90`}
+                          className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90 pointer-events-none`}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 0.9 }}
                           transition={{ duration: 0.3 }}
@@ -524,7 +508,7 @@ export function HeaderSimplified() {
 
                       {/* Hover gradient background */}
                       <motion.div
-                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20`}
+                        className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 pointer-events-none`}
                         transition={{ duration: 0.3 }}
                       />
 
@@ -539,26 +523,10 @@ export function HeaderSimplified() {
                   // Mobile Regular Navigation
                   <>
                     {!isWalletConnected && (
-                      <motion.div className="px-4" whileTap={{ scale: 0.98 }}>
-                        <Button
-                          onClick={connectWallet}
-                          disabled={!ready}
-                          className="w-full relative overflow-hidden px-4 py-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white border-none"
-                          style={{
-                            background: "var(--gradient-primary)",
-                            boxShadow: "0 4px 20px rgba(20, 184, 166, 0.3)",
-                          }}
-                        >
-                          {/* Gradient background */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-500 opacity-90" />
-
-                          {/* Content */}
-                          <div className="relative z-10 flex items-center gap-2">
-                            <Wallet className="w-4 h-4" />
-                            Connect Wallet
-                          </div>
-                        </Button>
-                      </motion.div>
+                      <div className="px-4 flex flex-col gap-2">
+                        <UserButton />
+                        <SignInButton />
+                      </div>
                     )}
 
                     {regularNavItems.map(item => (
@@ -577,7 +545,7 @@ export function HeaderSimplified() {
                         {/* Active gradient background */}
                         {activeTab === item.id && (
                           <motion.div
-                            className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90`}
+                            className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-90 pointer-events-none`}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 0.9 }}
                             transition={{ duration: 0.3 }}
@@ -586,7 +554,7 @@ export function HeaderSimplified() {
 
                         {/* Hover gradient background */}
                         <motion.div
-                          className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20`}
+                          className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 pointer-events-none`}
                           transition={{ duration: 0.3 }}
                         />
 

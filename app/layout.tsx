@@ -3,7 +3,9 @@ import { Inter, Source_Code_Pro } from "next/font/google";
 import { SafeArea } from "@coinbase/onchainkit/minikit";
 import { minikitConfig } from "../minikit.config";
 import { Providers } from "./rootProvider";
+import { CivicAuthProvider } from "@civic/auth-web3/nextjs";
 import "./globals.css";
+import { MainLayout } from '../components/layout/main-layout';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -41,15 +43,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body
-          className={`${inter.variable} ${sourceCodePro.variable}`}
-          cz-shortcut-listen="true"
-        >
-          <SafeArea>{children}</SafeArea>
-        </body>
-      </html>
-    </Providers>
+    <CivicAuthProvider>
+      <Providers>
+        <html lang="en" suppressHydrationWarning>
+          <body
+            className={`${inter.variable} ${sourceCodePro.variable}`}
+            cz-shortcut-listen="true"
+          >
+            <MainLayout >
+              <SafeArea>{children}</SafeArea>
+            </MainLayout>
+          </body>
+        </html>
+      </Providers>
+    </CivicAuthProvider>
   );
 }
