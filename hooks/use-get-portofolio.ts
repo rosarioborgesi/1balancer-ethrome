@@ -11,6 +11,6 @@ export const useGetPorftoflio = () => {
     queryFn: () => getTokensSnapshot(base.id.toString(), REBALANCER_WALLET),
     refetchInterval: REFETCH_INTERVAL,
   });
-
+  console.log("=====>>>>data", data);
   return { data, isSuccess, isLoading };
 };

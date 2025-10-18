@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RefreshCw, ArrowRightLeft } from "lucide-react";
+import { useGetPorftoflio } from "@/hooks/use-get-portofolio";
 
 interface Strategy {
   stablecoin: string;
@@ -28,6 +29,7 @@ interface ActivePortfolioProps {
 
 const ActivePortfolio: React.FC<ActivePortfolioProps> = ({ strategy }) => {
   const [timeUntilNext, setTimeUntilNext] = useState("");
+  useGetPorftoflio()
   const [transactions] = useState<Transaction[]>([
     {
       id: "1",
