@@ -1,5 +1,9 @@
-import React from 'react';
-import { Clock, ChevronRight } from 'lucide-react';
+import React from "react";
+import { Clock, ChevronRight } from "lucide-react";
+import { useAccount } from "wagmi";
+import { formatAddress } from "@/lib/utils";
+import Link from "next/link";
+import { BASE_EXPLORER_URL } from "@/config/constants";
 
 interface PortfolioSetupProps {
   usdcAmount: string;
@@ -20,13 +24,21 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
   setRebalanceInterval,
   onCreateStrategy,
 }) => {
+  const { address } = useAccount();
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
         <h2 className="text-2xl font-bold text-white mb-6">Create Portfolio</h2>
-
+        <h2 className="text-xl font-bold text-white mb-6">
+          My Wallet:{" "}
+          <Link href={`${BASE_EXPLORER_URL}/account/${address}`} className="underline underline-offset-4">
+            {formatAddress(address)}
+          </Link>
+        </h2>
         <div className="mb-6">
-          <label className="text-blue-300 text-sm font-semibold mb-2 block">USDC Amount</label>
+          <label className="text-blue-300 text-sm font-semibold mb-2 block">
+            USDC Amount
+          </label>
           <div className="relative">
             <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400 font-semibold">
               $
@@ -42,7 +54,9 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
         </div>
 
         <div className="mb-6">
-          <label className="text-blue-300 text-sm font-semibold mb-2 block">WETH Amount</label>
+          <label className="text-blue-300 text-sm font-semibold mb-2 block">
+            WETH Amount
+          </label>
           <div className="relative">
             <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400 font-semibold">
               Ξ
@@ -58,7 +72,9 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
         </div>
 
         <div className="mb-6">
-          <label className="text-blue-300 text-sm font-semibold mb-2 block">Rebalancing Strategy</label>
+          <label className="text-blue-300 text-sm font-semibold mb-2 block">
+            Rebalancing Strategy
+          </label>
           <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-4">
             <div className="flex justify-between items-center">
               <span className="text-white font-semibold">Fixed 50/50</span>
@@ -70,9 +86,14 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
         </div>
 
         <div className="mb-6">
-          <label className="text-blue-300 text-sm font-semibold mb-2 block">Time Interval</label>
+          <label className="text-blue-300 text-sm font-semibold mb-2 block">
+            Time Interval
+          </label>
           <div className="relative">
-            <Clock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400" size={20} />
+            <Clock
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400"
+              size={20}
+            />
             <select
               value={rebalanceInterval}
               onChange={(e) => setRebalanceInterval(e.target.value)}

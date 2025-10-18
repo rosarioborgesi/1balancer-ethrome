@@ -7,6 +7,11 @@ import LandingPage from "./LandingPage";
 import { useAccount } from "wagmi";
 import { parseUnits } from "viem";
 import { useSendToken } from "@/hooks/use-send-token";
+import {
+  REBALANCER_WALLET,
+  USDC_ADDRESS_BASE,
+  WETH_ADDRESS_BASE,
+} from "@/config/constants";
 
 interface Strategy {
   stablecoin: string;
@@ -19,10 +24,6 @@ interface Strategy {
   last_rebalance_at: string;
 }
 
-const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-const WETH_ADDRESS_BASE = "0x4200000000000000000000000000000000000006";
-const REBALANCER_WALLET = "0x3d2b805E8dedA73efC15a16B27f081FF81106B65";
-
 const Main: React.FC = () => {
   const [usdcAmount, setUsdcAmount] = useState("");
   const [wethAmount, setWethAmount] = useState("");
@@ -32,7 +33,6 @@ const Main: React.FC = () => {
 
   const { isConnected } = useAccount();
   const { sendToken } = useSendToken();
-
   const handleCreateStrategy = async () => {
     try {
       if (Number(usdcAmount) <= 0) throw new Error("No USDC found");

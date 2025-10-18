@@ -9,6 +9,7 @@ const LandingPage = () => {
   const { connect, connectors } = useConnect();
   const { isConnected } = useAccount();
   const { isInMiniApp } = useIsInMiniApp();
+
   useEffect(() => {
     if (isInMiniApp && !isConnected) {
       connect({ connector: connectors[0] });
@@ -72,13 +73,13 @@ const LandingPage = () => {
                 </p>
               </div>
             </div>
-            {isInMiniApp && (
+            {!isInMiniApp && (
               <button
                 onClick={() => connect({ connector: connectors[0] })}
                 className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl font-semibold text-white shadow-2xl hover:shadow-blue-500/50 transition-all hover:scale-105 flex items-center justify-center mx-auto"
               >
                 <Wallet className="mr-2" size={20} />
-                Connect Wallet
+                Connect Base Wallet
                 <ChevronRight
                   className="ml-2 group-hover:translate-x-1 transition-transform"
                   size={20}
