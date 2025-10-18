@@ -32,26 +32,30 @@ const Main: React.FC = () => {
   const [activeStrategy, setActiveStrategy] = useState<Strategy | null>(null);
 
   const { isConnected } = useAccount();
-  const { sendToken } = useSendToken();
+  const { sendToken: sendUSDC, isSuccess: isUSDCSuccess } = useSendToken();
+  const { sendToken: sendWETH, isSuccess: isWETHSuccess } = useSendToken();
   const handleCreateStrategy = async () => {
     try {
       if (Number(usdcAmount) <= 0) throw new Error("No USDC found");
-      await sendToken(
+      await sendUSDC(
         USDC_ADDRESS_BASE,
         REBALANCER_WALLET,
         parseUnits(usdcAmount, 6)
       );
-      await sendToken(
-        WETH_ADDRESS_BASE,
-        REBALANCER_WALLET,
-        parseUnits(usdcAmount, 6)
-      );
+      if (Number(wethAmount) > 0) {
+        await sendWETH(
+          WETH_ADDRESS_BASE,
+          REBALANCER_WALLET,
+          parseUnits(wethAmount, 18)
+        );
+      }
+      if (isUSDCSuccess && (isWETHSuccess || Number(wethAmount) === 0))
+        setShowModal(true);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : (error as string);
       console.error(message);
     }
-    setShowModal(true);
   };
 
   const handleConfirm = () => {

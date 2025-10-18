@@ -2,7 +2,7 @@ import { erc20Abi } from "viem";
 import { useWriteContract } from "wagmi";
 
 export function useSendToken() {
-  const { writeContractAsync, isPending } = useWriteContract();
+  const { writeContractAsync, isPending, isSuccess } = useWriteContract();
 
   const sendToken = async (
     tokenAddress: `0x${string}`,
@@ -17,5 +17,5 @@ export function useSendToken() {
     });
   };
 
-  return { sendToken, isPending };
+  return { sendToken, isSuccess, isPending };
 }
