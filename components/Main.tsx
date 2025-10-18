@@ -5,7 +5,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import PortfolioSetup from "./PortfolioSetup";
 import LandingPage from "./LandingPage";
 import { useAccount } from "wagmi";
-import { parseUnits } from "viem";
+import { parseEther, parseUnits } from "viem";
 import { useSendToken } from "@/hooks/use-send-token";
 import {
   REBALANCER_WALLET,
@@ -46,7 +46,7 @@ const Main: React.FC = () => {
         await sendWETH(
           WETH_ADDRESS_BASE,
           REBALANCER_WALLET,
-          parseUnits(wethAmount, 18)
+          parseEther(wethAmount)
         );
       }
       if (isUSDCSuccess && (isWETHSuccess || Number(wethAmount) === 0))
