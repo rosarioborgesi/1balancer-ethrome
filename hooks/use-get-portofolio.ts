@@ -3,7 +3,7 @@ import { getTokensSnapshot } from "@/lib/actions/portfolio";
 import { useQuery } from "@tanstack/react-query";
 import { base } from "viem/chains";
 
-const REFETCH_INTERVAL = 5000;
+const REFETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 interface TokenData {
   address: string;
