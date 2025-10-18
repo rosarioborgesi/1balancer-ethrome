@@ -9,7 +9,6 @@ import {
   useOpenUrl,
 } from "@coinbase/onchainkit/minikit";
 import { useRouter } from "next/navigation";
-import { format } from "path";
 import { Address } from "viem";
 
 interface PortfolioSetupProps {
