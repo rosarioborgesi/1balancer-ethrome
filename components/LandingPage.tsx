@@ -31,7 +31,6 @@ const LandingPage = () => {
               <div className="w-32 h-12 rounded-lg flex items-center justify-center">
                 <Image src={OneBalancerLogo} alt="One balancer logo" />
               </div>
-              <span className="text-2xl font-bold text-white">1balancer</span>
             </div>
           </div>
         </nav>
