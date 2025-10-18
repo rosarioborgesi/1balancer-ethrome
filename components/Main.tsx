@@ -52,8 +52,7 @@ const Main: React.FC = () => {
           parseEther(wethAmount)
         );
       }
-      if (isUSDCSuccess && (isWETHSuccess || Number(wethAmount) === 0))
-        setShowModal(true);
+      if (isUSDCSuccess) setShowModal(true);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : (error as string);
