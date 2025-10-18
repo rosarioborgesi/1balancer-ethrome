@@ -3,7 +3,11 @@ import { Clock, ChevronRight } from "lucide-react";
 import { useAccount } from "wagmi";
 import { formatAddress } from "@/lib/utils";
 import { BASE_EXPLORER_URL } from "@/config/constants";
-import { useIsInMiniApp, useOpenUrl } from "@coinbase/onchainkit/minikit";
+import {
+  useIsInMiniApp,
+  useMiniKit,
+  useOpenUrl,
+} from "@coinbase/onchainkit/minikit";
 import { useRouter } from "next/navigation";
 
 interface PortfolioSetupProps {
@@ -26,6 +30,7 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
   onCreateStrategy,
 }) => {
   const { address } = useAccount();
+  const { context } = useMiniKit();
   const openUrl = useOpenUrl();
   const { isInMiniApp } = useIsInMiniApp();
   const router = useRouter();
@@ -40,6 +45,10 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
+       
+        <h2 className="text-3xl font-bold text-white mb-6">
+          Hello {context?.user.username}
+        </h2>
         <h2 className="text-2xl font-bold text-white mb-6">Create Portfolio</h2>
         <h2 className="text-xl font-bold text-white mb-6">
           My Wallet:{" "}
