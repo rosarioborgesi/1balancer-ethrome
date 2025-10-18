@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+import { ThemeProvider } from "./provider/ThemeProvider";
+import LiveCryptoTickerServer from "./footer/LiveCryptoTickerServer";
+import { HeaderSimplified } from "./header";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -8,10 +11,12 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children, className }: MainLayoutProps) => {
   return (
-    <div className={cn("w-screen min-h-screen", className)}>
-      {/*HEADER WITH CHECK IF IS MINIAPP*/}
-      <main>{children}</main>
-      {/*FOOTER*/}
-    </div>
+    <ThemeProvider enableSystem>
+      <HeaderSimplified />
+      <div className={cn("w-screen min-h-screen pt-16 sm:pt-20", className)}>
+        <main>{children}</main>
+      </div>
+      <LiveCryptoTickerServer />
+    </ThemeProvider>
   );
 };
