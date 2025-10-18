@@ -2,8 +2,9 @@ import React from "react";
 import { Clock, ChevronRight } from "lucide-react";
 import { useAccount } from "wagmi";
 import { formatAddress } from "@/lib/utils";
-import Link from "next/link";
 import { BASE_EXPLORER_URL } from "@/config/constants";
+import { useIsInMiniApp, useOpenUrl } from "@coinbase/onchainkit/minikit";
+import { useRouter } from "next/navigation";
 
 interface PortfolioSetupProps {
   usdcAmount: string;
@@ -25,15 +26,29 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
   onCreateStrategy,
 }) => {
   const { address } = useAccount();
+  const openUrl = useOpenUrl();
+  const { isInMiniApp } = useIsInMiniApp();
+  const router = useRouter();
+  const handlerOnClick = () => {
+    const linkUrl = `${BASE_EXPLORER_URL}/address/${address}`;
+    if (isInMiniApp) {
+      openUrl(linkUrl);
+    } else {
+      router.push(linkUrl);
+    }
+  };
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
         <h2 className="text-2xl font-bold text-white mb-6">Create Portfolio</h2>
         <h2 className="text-xl font-bold text-white mb-6">
           My Wallet:{" "}
-          <Link href={`${BASE_EXPLORER_URL}/account/${address}`} className="underline underline-offset-4">
+          <button
+            onClick={handlerOnClick}
+            className="underline underline-offset-4 cursor-pointer"
+          >
             {formatAddress(address)}
-          </Link>
+          </button>
         </h2>
         <div className="mb-6">
           <label className="text-blue-300 text-sm font-semibold mb-2 block">
