@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Source_Code_Pro } from "next/font/google";
 import { SafeArea } from "@coinbase/onchainkit/minikit";
 import { minikitConfig } from "../minikit.config";
-import { Providers } from "./rootProvider";
 import "./globals.css";
+import { RootProvider } from "./rootProvider";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
+    <RootProvider>
       <html lang="en">
         <body
           className={`${inter.variable} ${sourceCodePro.variable}`}
@@ -50,6 +50,6 @@ export default function RootLayout({
           <SafeArea>{children}</SafeArea>
         </body>
       </html>
-    </Providers>
+    </RootProvider>
   );
 }

@@ -1,10 +1,23 @@
 import { CivicAuthProvider } from "@civic/auth-web3/react";
 import { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  WagmiProvider,
+  createConfig,
+  http,
+} from "wagmi";
+import { embeddedWallet } from "@civic/auth-web3/wagmi";
+import { base } from "wagmi/chains";
 
-export const Providers = ({ children }: { children: ReactNode }) => {
-  return (
-    <CivicAuthProvider clientId={"7569d678-d9a6-4b3c-8e8a-15438472a57c"}>
-      {children}
-    </CivicAuthProvider>
-  );
-};
+const wagmiConfig = createConfig({
+  chains: [base],
+  transports: {
+    [base.id]: http(),
+  },
+  connectors: [embeddedWallet()],
+});
+
+// Wagmi requires react-query
+const queryClient = new QueryClient();
+
+

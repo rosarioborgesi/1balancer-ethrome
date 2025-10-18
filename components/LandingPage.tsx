@@ -7,9 +7,27 @@ import {
   RefreshCw,
   ChevronRight,
 } from "lucide-react";
+import { useAutoConnect } from "@civic/auth-web3/wagmi";
+import { useAccount, useBalance, useConnect } from "wagmi";
+import { userHasWallet } from "@civic/auth-web3";
+import { useState, useEffect } from "react";
 
 const LandingPage = () => {
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const { signIn } = useUser();
+
+  
+
+  /* const { connectors, connect } = useConnect();
+
+  
+
+  const connectWallet = () =>
+    connect({
+      // connect to the "civic" connector
+      connector: connectors[0],
+    }); */
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       <div className="relative overflow-hidden">
@@ -79,6 +97,17 @@ const LandingPage = () => {
                 size={20}
               />
             </button>
+
+            {/* <button onClick={connectWallet}>Connect Wallet</button> */}
+            
+            {/* <p>
+              Balance:{" "}
+              {balance?.data
+                ? `${(BigInt(balance.data.value) / BigInt(1e18)).toString()} ${
+                    balance.data.symbol
+                  }`
+                : "Loading..."}
+            </p> */}
           </div>
         </div>
       </div>
