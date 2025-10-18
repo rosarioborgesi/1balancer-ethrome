@@ -9,15 +9,15 @@ const ROOT_URL =
  */
 export const minikitConfig = {
   accountAssociation: {
-    header: "",
-    payload: "",
-    signature: ""
+    header: process.env.NEXT_PUBLIC_MINIAPP_HEADER,
+    payload: process.env.NEXT_PUBLIC_MINIAPP_PAYLOAD,
+    signature: process.env.NEXT_PUBLIC_MINIAPP_SIGNATURE,
   },
   miniapp: {
     version: "1",
-    name: "Cubey", 
-    subtitle: "Your AI Ad Companion", 
-    description: "Ads",
+    name: "1rebalancer",
+    subtitle: "Automatic portfolio rebalancing",
+    description: "Automatic portfolio rebalancing",
     screenshotUrls: [`${ROOT_URL}/screenshot-portrait.png`],
     iconUrl: `${ROOT_URL}/blue-icon.png`,
     splashImageUrl: `${ROOT_URL}/blue-hero.png`,
@@ -26,7 +26,7 @@ export const minikitConfig = {
     webhookUrl: `${ROOT_URL}/api/webhook`,
     primaryCategory: "social",
     tags: ["marketing", "ads", "quickstart", "waitlist"],
-    heroImageUrl: `${ROOT_URL}/blue-hero.png`, 
+    heroImageUrl: `${ROOT_URL}/blue-hero.png`,
     tagline: "",
     ogTitle: "",
     ogDescription: "",
