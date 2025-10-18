@@ -1,7 +1,7 @@
 import React from "react";
 import { Clock, ChevronRight } from "lucide-react";
 import { useAccount } from "wagmi";
-import { formatAddress } from "@/lib/utils";
+import { formatAddress, getBasenameName } from "@/lib/utils";
 import { BASE_EXPLORER_URL } from "@/config/constants";
 import {
   useIsInMiniApp,
@@ -9,6 +9,8 @@ import {
   useOpenUrl,
 } from "@coinbase/onchainkit/minikit";
 import { useRouter } from "next/navigation";
+import { format } from "path";
+import { Address } from "viem";
 
 interface PortfolioSetupProps {
   usdcAmount: string;
@@ -57,7 +59,7 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
             onClick={handlerOnClick}
             className="underline underline-offset-4 cursor-pointer"
           >
-            {formatAddress(address)}
+            {getBasenameName("limone.base.eth" as Address) || formatAddress(address)}
           </button>
         </h2>
         <div className="mb-6">
