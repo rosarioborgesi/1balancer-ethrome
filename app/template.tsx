@@ -22,7 +22,7 @@ const Template = ({ children }: { children: ReactNode }) => {
       didInit.current = true;
     }
   }, [checkFrameAndAdd, context]);
-  return { children };
+  return <>{children}</>;
 };
 
 export default Template;
