@@ -100,6 +100,7 @@ const Main: React.FC = () => {
           rebalanceInterval={rebalanceInterval}
           setRebalanceInterval={setRebalanceInterval}
           onCreateStrategy={handleCreateStrategy}
+          onShowPortfolio={handleConfirm}
         />
       </div>
 

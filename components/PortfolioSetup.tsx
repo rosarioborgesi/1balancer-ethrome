@@ -18,6 +18,7 @@ interface PortfolioSetupProps {
   rebalanceInterval: string;
   setRebalanceInterval: (value: string) => void;
   onCreateStrategy: () => void;
+  onShowPortfolio: () => void;
 }
 
 const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
@@ -28,6 +29,7 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
   rebalanceInterval,
   setRebalanceInterval,
   onCreateStrategy,
+  onShowPortfolio,
 }) => {
   const { address } = useAccount();
   const { context } = useMiniKit();
@@ -45,7 +47,6 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
-       
         <h2 className="text-3xl font-bold text-white mb-6">
           Hello {context?.user.username}
         </h2>
@@ -137,6 +138,13 @@ const PortfolioSetup: React.FC<PortfolioSetupProps> = ({
           className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-semibold py-4 rounded-xl hover:shadow-lg hover:shadow-blue-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
           Create Strategy
+          <ChevronRight className="ml-2" size={20} />
+        </button>
+        <button
+          onClick={onShowPortfolio}
+          className="mt-8 w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-semibold py-4 rounded-xl hover:shadow-lg hover:shadow-blue-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+        >
+          View your Portofolio
           <ChevronRight className="ml-2" size={20} />
         </button>
       </div>
