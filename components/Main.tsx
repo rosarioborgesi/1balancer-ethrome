@@ -12,6 +12,8 @@ import {
   USDC_ADDRESS_BASE,
   WETH_ADDRESS_BASE,
 } from "@/config/constants";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
+import { ROOT_URL } from "@/minikit.config";
 
 interface Strategy {
   stablecoin: string;
@@ -34,6 +36,7 @@ const Main: React.FC = () => {
   const { isConnected } = useAccount();
   const { sendToken: sendUSDC, isSuccess: isUSDCSuccess } = useSendToken();
   const { sendToken: sendWETH, isSuccess: isWETHSuccess } = useSendToken();
+  const { composeCast } = useComposeCast();
   const handleCreateStrategy = async () => {
     try {
       if (Number(usdcAmount) <= 0) throw new Error("No USDC found");
@@ -58,19 +61,28 @@ const Main: React.FC = () => {
     }
   };
 
-  const handleConfirm = () => {
-    const strategy: Strategy = {
-      stablecoin: "USDC",
-      token: "WETH",
-      initial_amount: parseFloat(usdcAmount),
-      weth_amount: parseFloat(wethAmount),
-      stable_ratio: 50,
-      token_ratio: 50,
-      rebalance_interval_minutes: parseInt(rebalanceInterval),
-      last_rebalance_at: new Date().toISOString(),
-    };
+  const strategy: Strategy = {
+    stablecoin: "USDC",
+    token: "WETH",
+    initial_amount: parseFloat(usdcAmount),
+    weth_amount: parseFloat(wethAmount),
+    stable_ratio: 50,
+    token_ratio: 50,
+    rebalance_interval_minutes: parseInt(rebalanceInterval),
+    last_rebalance_at: new Date().toISOString(),
+  };
+
+  const handleConfirm = async () => {
     setActiveStrategy(strategy);
     setShowModal(false);
+    await composeCast({
+      text: "I have just create a strategy with 1balancer",
+      embeds: [ROOT_URL],
+    });
+  };
+
+  const handleViewPortfolio = () => {
+    setActiveStrategy(strategy);
   };
 
   if (!isConnected) {
@@ -100,7 +112,7 @@ const Main: React.FC = () => {
           rebalanceInterval={rebalanceInterval}
           setRebalanceInterval={setRebalanceInterval}
           onCreateStrategy={handleCreateStrategy}
-          onShowPortfolio={handleConfirm}
+          onShowPortfolio={handleViewPortfolio}
         />
       </div>
 
