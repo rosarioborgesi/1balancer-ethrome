@@ -1,7 +1,11 @@
-import React from 'react';
-import { RefreshCw } from 'lucide-react';
+import React from "react";
+import { RefreshCw } from "lucide-react";
+import { useDisconnect } from "wagmi";
+import { useIsInMiniApp } from "@coinbase/onchainkit/minikit";
 
 const Header: React.FC = () => {
+  const { disconnect } = useDisconnect();
+  const { isInMiniApp } = useIsInMiniApp();
   return (
     <nav className="bg-black/20 backdrop-blur-lg border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -11,6 +15,14 @@ const Header: React.FC = () => {
           </div>
           <span className="text-2xl font-bold text-white">1balancer</span>
         </div>
+        {!isInMiniApp && (
+          <button
+            className="w-32 px-6 py-2 text-white bg-gray-800/50 rounded-xl cursor-pointer"
+            onClick={() => disconnect()}
+          >
+            SignOut
+          </button>
+        )}
       </div>
     </nav>
   );

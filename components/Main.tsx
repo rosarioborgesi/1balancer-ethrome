@@ -4,7 +4,9 @@ import ActivePortfolio from "./ActivePortfolio";
 import ConfirmationModal from "./ConfirmationModal";
 import PortfolioSetup from "./PortfolioSetup";
 import LandingPage from "./LandingPage";
-import { useUser } from "@civic/auth-web3/react";
+import { useAccount } from "wagmi";
+import { parseUnits } from "viem";
+import { useSendToken } from "@/hooks/use-send-token";
 
 interface Strategy {
   stablecoin: string;
@@ -17,17 +19,38 @@ interface Strategy {
   last_rebalance_at: string;
 }
 
+const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+const WETH_ADDRESS_BASE = "0x4200000000000000000000000000000000000006";
+const REBALANCER_WALLET = "0x3d2b805E8dedA73efC15a16B27f081FF81106B65";
+
 const Main: React.FC = () => {
-  const [isConnected, setIsConnected] = useState(false);
   const [usdcAmount, setUsdcAmount] = useState("");
   const [wethAmount, setWethAmount] = useState("");
   const [rebalanceInterval, setRebalanceInterval] = useState("1440");
   const [showModal, setShowModal] = useState(false);
   const [activeStrategy, setActiveStrategy] = useState<Strategy | null>(null);
-  const { user } = useUser();
-  console.log("======>", user);
 
-  const handleCreateStrategy = () => {
+  const { isConnected } = useAccount();
+  const { sendToken } = useSendToken();
+
+  const handleCreateStrategy = async () => {
+    try {
+      if (Number(usdcAmount) <= 0) throw new Error("No USDC found");
+      await sendToken(
+        USDC_ADDRESS_BASE,
+        REBALANCER_WALLET,
+        parseUnits(usdcAmount, 6)
+      );
+      await sendToken(
+        WETH_ADDRESS_BASE,
+        REBALANCER_WALLET,
+        parseUnits(usdcAmount, 6)
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : (error as string);
+      console.error(message);
+    }
     setShowModal(true);
   };
 
@@ -46,7 +69,7 @@ const Main: React.FC = () => {
     setShowModal(false);
   };
 
-  if (!user) {
+  if (!isConnected) {
     return <LandingPage />;
   }
 

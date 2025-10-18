@@ -1,4 +1,3 @@
-import { useUser } from "@civic/auth-web3/react";
 import {
   Wallet,
   Shield,
@@ -7,26 +6,10 @@ import {
   RefreshCw,
   ChevronRight,
 } from "lucide-react";
-import { useAutoConnect } from "@civic/auth-web3/wagmi";
-import { useAccount, useBalance, useConnect } from "wagmi";
-import { userHasWallet } from "@civic/auth-web3";
-import { useState, useEffect } from "react";
+import { useConnect } from "wagmi";
 
 const LandingPage = () => {
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const { signIn } = useUser();
-
-  
-
-  /* const { connectors, connect } = useConnect();
-
-  
-
-  const connectWallet = () =>
-    connect({
-      // connect to the "civic" connector
-      connector: connectors[0],
-    }); */
+  const { connect, connectors } = useConnect();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -87,7 +70,7 @@ const LandingPage = () => {
             </div>
 
             <button
-              onClick={() => signIn()}
+              onClick={() => connect({ connector: connectors[0] })}
               className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl font-semibold text-white shadow-2xl hover:shadow-blue-500/50 transition-all hover:scale-105 flex items-center justify-center mx-auto"
             >
               <Wallet className="mr-2" size={20} />
@@ -97,17 +80,6 @@ const LandingPage = () => {
                 size={20}
               />
             </button>
-
-            {/* <button onClick={connectWallet}>Connect Wallet</button> */}
-            
-            {/* <p>
-              Balance:{" "}
-              {balance?.data
-                ? `${(BigInt(balance.data.value) / BigInt(1e18)).toString()} ${
-                    balance.data.symbol
-                  }`
-                : "Loading..."}
-            </p> */}
           </div>
         </div>
       </div>
