@@ -35,7 +35,7 @@ const Main: React.FC = () => {
 
   const { isConnected } = useAccount();
   const { sendToken: sendUSDC, isSuccess: isUSDCSuccess } = useSendToken();
-  const { sendToken: sendWETH, isSuccess: isWETHSuccess } = useSendToken();
+  const { sendToken: sendWETH, } = useSendToken();
   const { composeCast } = useComposeCast();
   const handleCreateStrategy = async () => {
     try {
