@@ -16,7 +16,7 @@ const MainPage = () => {
   }, [setMiniAppReady, isMiniAppReady]);
   if (isInMiniApp === undefined) return null;
 
-  return isInMiniApp ? null : <OneBalancerController />;
+  return isInMiniApp ? <div>Mini App</div> : <OneBalancerController />;
 };
 
 export default MainPage;

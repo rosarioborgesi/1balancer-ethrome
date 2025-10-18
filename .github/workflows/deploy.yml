@@ -1,4 +1,4 @@
-name: Deploy Next.js Monorepo Apps to Vercel
+name: Deploy
 
 on:
   push:
@@ -6,14 +6,10 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  ENABLE_EXPERIMENTAL_COREPACK: 1
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      ENABLE_EXPERIMENTAL_COREPACK: 1
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - name: Checkout monorepo
@@ -26,13 +22,11 @@ jobs:
         uses: pnpm/action-setup@v4
       - name: Install all dependencies (monorepo root)
         run: pnpm install
-      - name: Deploy 1balancer to Vercel
-        env:
-          PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-          NEXT_PUBLIC_ONCHAINKIT_API_KEY: ${{ secrets.NEXT_PUBLIC_ONCHAINKIT_API_KEY }}
+      - name: Deploy to Vercel
         run: |
+          PROJECT_NAME="${{ secrets.PROJECT_NAME }}"
           echo "Linking to Vercel project for $PROJECT_NAME..."
           npx vercel link --yes --project "$PROJECT_NAME" --token $VERCEL_TOKEN
-          echo "🚀 Deploying 1balancer to Vercel..."
-          npx vercel deploy --prod --yes --token $VERCEL_TOKEN --env NEXT_PUBLIC_ONCHAINKIT_API_KEY=$NEXT_PUBLIC_ONCHAINKIT_API_KEY
-          echo "✅ 1balancer deployed successfully!"
+          echo "🚀 Deploying $PROJECT_NAME to Vercel..."
+          npx vercel deploy --prod --yes --token $VERCEL_TOKEN 
+          echo "✅ $PROJECT_NAME deployed successfully!"
