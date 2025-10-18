@@ -29,7 +29,7 @@ interface ActivePortfolioProps {
 
 const ActivePortfolio: React.FC<ActivePortfolioProps> = ({ strategy }) => {
   const [timeUntilNext, setTimeUntilNext] = useState("");
-  useGetPorftoflio()
+  const { usdcAmount, wethAmount, totalAmount } = useGetPorftoflio();
   const [transactions] = useState<Transaction[]>([
     {
       id: "1",
@@ -42,7 +42,7 @@ const ActivePortfolio: React.FC<ActivePortfolioProps> = ({ strategy }) => {
     },
   ]);
 
-  useEffect(() => {
+ useEffect(() => {
     const interval = setInterval(() => {
       calculateTimeUntilNext();
     }, 1000);
@@ -150,7 +150,7 @@ const ActivePortfolio: React.FC<ActivePortfolioProps> = ({ strategy }) => {
               </div>
               <div className="text-right">
                 <p className="text-white font-semibold">
-                  ${strategy.initial_amount}
+                ${(usdcAmount ?? 0).toFixed(2)} USDC
                 </p>
                 <p className="text-green-400 text-sm">
                   {strategy.stable_ratio}%
@@ -164,7 +164,7 @@ const ActivePortfolio: React.FC<ActivePortfolioProps> = ({ strategy }) => {
               </div>
               <div className="text-right">
                 <p className="text-white font-semibold">
-                  {strategy.weth_amount} WETH
+                  ${(wethAmount ?? 0).toFixed(2)} WETH
                 </p>
                 <p className="text-blue-400 text-sm">{strategy.token_ratio}%</p>
               </div>
@@ -180,7 +180,7 @@ const ActivePortfolio: React.FC<ActivePortfolioProps> = ({ strategy }) => {
             <div className="flex items-center justify-between">
               <span className="text-blue-200 text-sm">Total Value</span>
               <span className="text-white text-2xl font-bold">
-                ${strategy.initial_amount}
+                ${(totalAmount ?? 0).toFixed(2)}
               </span>
             </div>
             <div className="flex items-center justify-between">
