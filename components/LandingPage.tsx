@@ -1,3 +1,4 @@
+import { useIsInMiniApp } from "@coinbase/onchainkit/minikit";
 import {
   Wallet,
   Shield,
@@ -6,10 +7,18 @@ import {
   RefreshCw,
   ChevronRight,
 } from "lucide-react";
-import { useConnect } from "wagmi";
+import { useEffect } from "react";
+import { useAccount, useConnect } from "wagmi";
 
 const LandingPage = () => {
   const { connect, connectors } = useConnect();
+  const { isConnected } = useAccount();
+  const { isInMiniApp } = useIsInMiniApp();
+  useEffect(() => {
+    if (isInMiniApp && !isConnected) {
+      connect({ connector: connectors[0] });
+    }
+  }, [connect, connectors, isConnected, isInMiniApp]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -68,18 +77,19 @@ const LandingPage = () => {
                 </p>
               </div>
             </div>
-
-            <button
-              onClick={() => connect({ connector: connectors[0] })}
-              className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl font-semibold text-white shadow-2xl hover:shadow-blue-500/50 transition-all hover:scale-105 flex items-center justify-center mx-auto"
-            >
-              <Wallet className="mr-2" size={20} />
-              Connect Wallet
-              <ChevronRight
-                className="ml-2 group-hover:translate-x-1 transition-transform"
-                size={20}
-              />
-            </button>
+            {isInMiniApp && (
+              <button
+                onClick={() => connect({ connector: connectors[0] })}
+                className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl font-semibold text-white shadow-2xl hover:shadow-blue-500/50 transition-all hover:scale-105 flex items-center justify-center mx-auto"
+              >
+                <Wallet className="mr-2" size={20} />
+                Connect Wallet
+                <ChevronRight
+                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                  size={20}
+                />
+              </button>
+            )}
           </div>
         </div>
       </div>
