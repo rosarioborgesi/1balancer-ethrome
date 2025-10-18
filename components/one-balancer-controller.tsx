@@ -1,4 +1,4 @@
-import { DappLogin } from "@/components/dapp-login/dapp-login";
+import { DappLogin } from "@/components/shared/ui/dapp-login";
 import { Wallet } from "@/components/wallet/wallet";
 import { useUserInfo } from "@/hooks/use-user-info";
 

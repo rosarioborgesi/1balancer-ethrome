@@ -8,9 +8,6 @@ import { useUserInfo } from "@/hooks/use-user-info";
 import { AlertCircle, ArrowRight, FileText, Shield, TrendingUp, Wallet, Zap } from "lucide-react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
-import { useUser } from "@civic/auth-web3/react";
-
-
 
 interface HomeProps {
   onGetStarted?: () => void;
@@ -22,17 +19,34 @@ export function Home({ onGetStarted }: HomeProps) {
   const router = useRouter();
   const { isUserAuthenticated } = useUserInfo();
   const [showWhitepaper, setShowWhitepaper] = useState(false);
-  const { user } = useUser();
+  const [redirectAfterAuth, setRedirectAfterAuth] = useState(false);
 
   // Use user authentication state as primary source of truth
-  const isWalletConnected = user != null;
-  console.log(isWalletConnected, user)
+  const isWalletConnected = isUserAuthenticated;
+
+  // Redirect to wallet only if the user explicitly requested Get Started
+  useEffect(() => {
+    if (isUserAuthenticated && redirectAfterAuth) {
+      // Small delay to allow authentication to complete
+      const timer = setTimeout(() => {
+        router.push("/wallet");
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isUserAuthenticated, router, redirectAfterAuth]);
 
   const handleGetStarted = async () => {
-    console.log("Get Started clicked!", { isWalletConnected, isUserAuthenticated });
-    
-    // Always navigate to wallet page regardless of auth status
-    // The wallet page will handle auth prompts if needed
+    if (!isWalletConnected) {
+      toast.info("Please connect your wallet", {
+        description: "Use Civic or Farcaster to authenticate",
+        duration: 3000,
+      });
+      // Mark that we should redirect after authentication completes
+      setRedirectAfterAuth(true);
+      return;
+    }
+
+    // If already connected, trigger the callback which will redirect
     if (onGetStarted) {
       onGetStarted();
     } else {

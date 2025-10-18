@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { base } from "wagmi/chains";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import "@coinbase/onchainkit/styles.css";
+import { CivicAuthProvider } from "@civic/auth-web3/nextjs";
 import { AuthKitProvider } from "@farcaster/auth-kit";
 
 export function RootProvider({ children }: { children: ReactNode }) {
@@ -39,7 +40,9 @@ export const Providers = ({ children }: { children: ReactNode }) => {
 
   return (
     <RootProvider>
-      <AuthKitProvider config={config}>{children}</AuthKitProvider>
+      <CivicAuthProvider>
+        <AuthKitProvider config={config}>{children}</AuthKitProvider>
+      </CivicAuthProvider>
     </RootProvider>
   );
 };
